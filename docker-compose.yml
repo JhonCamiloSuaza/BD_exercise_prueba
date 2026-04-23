@@ -1,0 +1,54 @@
+# ============================================================
+# Docker Compose - Base de Datos + Liquibase
+# Autor: Jhon Camilo Suaza Sanchez
+# ============================================================
+# Uso: docker-compose up --build
+# Esto levanta PostgreSQL y ejecuta las migraciones automáticamente
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ---- PostgreSQL 16 ----
+  db:
+    image: postgres:16-alpine
+    container_name: Bd_exercise_api
+    environment:
+      POSTGRES_DB: Bd_exercise_api
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: camilo200804
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Bd_exercise_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - exercise_network
+
+  # ---- Liquibase Migrations ----
+  liquibase:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: exercise_liquibase
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://db:5432/Bd_exercise_api
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: camilo200804
+    networks:
+      - exercise_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  exercise_network:
+    driver: bridge

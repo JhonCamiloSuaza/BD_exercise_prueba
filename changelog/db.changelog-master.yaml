@@ -1,0 +1,38 @@
+databaseChangeLog:
+  # ============================================================
+  # CHANGELOG MAESTRO - Base de Datos Exercise
+  # ============================================================
+  # Orden de ejecución: DDL → DML → DCL
+  # ============================================================
+
+  # ---- DDL: Definición de Estructura ----
+  - include:
+      file: ddl/001-create-extension-uuid.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: ddl/002-create-table-usuario.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: ddl/003-create-table-libro.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: ddl/004-create-table-prestamo.yaml
+      relativeToChangelogFile: true
+
+  # ---- DML: Datos Iniciales ----
+  - include:
+      file: dml/005-insert-usuarios.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: dml/006-insert-libros.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: dml/007-insert-prestamos.yaml
+      relativeToChangelogFile: true
+
+  # ---- DCL: Control de Acceso ----
+  - include:
+      file: dcl/008-grant-permissions.yaml
+      relativeToChangelogFile: true
+
+ESTO_ES_UN_ERROR_DE_SINTAXIS

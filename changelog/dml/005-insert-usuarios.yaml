@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-insert-usuarios
+      author: Jhon Camilo Suaza Sanchez
+      comment: "Insertar datos iniciales de usuarios"
+      changes:
+        - insert:
+            tableName: usuario
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: nombre, value: "Carlos" }
+              - column: { name: apellido, value: "García" }
+              - column: { name: email, value: "carlos.garcia@email.com" }
+              - column: { name: telefono, value: "+57 300 123 4567" }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: usuario
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: nombre, value: "María" }
+              - column: { name: apellido, value: "López" }
+              - column: { name: email, value: "maria.lopez@email.com" }
+              - column: { name: telefono, value: "+57 311 987 6543" }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: usuario
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: nombre, value: "Andrés" }
+              - column: { name: apellido, value: "Martínez" }
+              - column: { name: email, value: "andres.martinez@email.com" }
+              - column: { name: telefono, value: "+57 320 555 1234" }
+              - column: { name: activo, valueBoolean: true }
+      rollback:
+        - delete:
+            tableName: usuario
+            where: email IN ('carlos.garcia@email.com','maria.lopez@email.com','andres.martinez@email.com')

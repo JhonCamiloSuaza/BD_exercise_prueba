@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-table-libro
+      author: Jhon Camilo Suaza Sanchez
+      comment: "Crear tabla libro - Entidad primaria del catálogo"
+      changes:
+        - createTable:
+            tableName: libro
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_libro
+              - column:
+                  name: titulo
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: autor
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isbn
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_libro_isbn
+              - column:
+                  name: genero
+                  type: VARCHAR(80)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: fecha_publicacion
+                  type: DATE
+                  constraints:
+                    nullable: true
+              - column:
+                  name: disponible
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: libro

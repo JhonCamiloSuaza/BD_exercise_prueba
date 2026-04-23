@@ -1,0 +1,86 @@
+# ============================================================
+# GitHub Action: Validación de Liquibase
+# ============================================================
+# Se dispara en cada push y pull request.
+# Valida que los changelogs de Liquibase sean correctos.
+# Si hay errores de validación, el pipeline falla y NO deja
+# hacer merge/subir los cambios.
+# ============================================================
+
+name: "Liquibase - Validar Changelogs"
+
+on:
+  push:
+    branches: [ main, develop, '**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate-liquibase:
+    name: "Validar Changelogs de Liquibase"
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: Bd_exercise_api
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: camilo200804
+        ports:
+          - 5437:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d Bd_exercise_api"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: "📥 Checkout del repositorio"
+        uses: actions/checkout@v4
+
+      - name: "☕ Configurar Java 17"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: "📦 Instalar Liquibase"
+        run: |
+          wget -q https://github.com/liquibase/liquibase/releases/download/v4.27.0/liquibase-4.27.0.tar.gz
+          mkdir -p /opt/liquibase
+          tar -xzf liquibase-4.27.0.tar.gz -C /opt/liquibase
+          echo "/opt/liquibase" >> $GITHUB_PATH
+
+      - name: "🔍 Validar sintaxis de Changelogs"
+        run: |
+          liquibase \
+            --changelog-file=changelog/db.changelog-master.yaml \
+            --url=jdbc:postgresql://localhost:5437/Bd_exercise_api \
+            --username=postgres \
+            --password=camilo200804 \
+            validate
+        env:
+          LIQUIBASE_HUB_MODE: off
+
+      - name: "🚀 Ejecutar migraciones (prueba de integración)"
+        run: |
+          liquibase \
+            --changelog-file=changelog/db.changelog-master.yaml \
+            --url=jdbc:postgresql://localhost:5437/Bd_exercise_api \
+            --username=postgres \
+            --password=camilo200804 \
+            update
+        env:
+          LIQUIBASE_HUB_MODE: off
+
+      - name: "✅ Verificar estado de la base de datos"
+        run: |
+          liquibase \
+            --changelog-file=changelog/db.changelog-master.yaml \
+            --url=jdbc:postgresql://localhost:5437/Bd_exercise_api \
+            --username=postgres \
+            --password=camilo200804 \
+            status
+        env:
+          LIQUIBASE_HUB_MODE: off

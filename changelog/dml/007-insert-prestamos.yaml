@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-insert-prestamos
+      author: Jhon Camilo Suaza Sanchez
+      comment: "Insertar datos iniciales de préstamos vinculando usuarios con libros"
+      changes:
+        - sql:
+            comment: "Préstamo 1: Carlos García toma prestado Cien Años de Soledad"
+            sql: >
+              INSERT INTO prestamo (id, usuario_id, libro_id, fecha_prestamo, fecha_devolucion, estado)
+              VALUES (
+                uuid_generate_v4(),
+                (SELECT id FROM usuario WHERE email = 'carlos.garcia@email.com'),
+                (SELECT id FROM libro WHERE isbn = '978-0-06-088328-7'),
+                '2026-04-01 10:00:00',
+                NULL,
+                'ACTIVO'
+              );
+        - sql:
+            comment: "Préstamo 2: María López toma prestado El Principito"
+            sql: >
+              INSERT INTO prestamo (id, usuario_id, libro_id, fecha_prestamo, fecha_devolucion, estado)
+              VALUES (
+                uuid_generate_v4(),
+                (SELECT id FROM usuario WHERE email = 'maria.lopez@email.com'),
+                (SELECT id FROM libro WHERE isbn = '978-0-15-601219-5'),
+                '2026-04-10 14:30:00',
+                NULL,
+                'ACTIVO'
+              );
+        - sql:
+            comment: "Préstamo 3: Andrés Martínez tomó prestado 1984 y ya lo devolvió"
+            sql: >
+              INSERT INTO prestamo (id, usuario_id, libro_id, fecha_prestamo, fecha_devolucion, estado)
+              VALUES (
+                uuid_generate_v4(),
+                (SELECT id FROM usuario WHERE email = 'andres.martinez@email.com'),
+                (SELECT id FROM libro WHERE isbn = '978-0-45-152493-5'),
+                '2026-03-15 09:00:00',
+                '2026-04-01 09:00:00',
+                'DEVUELTO'
+              );
+      rollback:
+        - sql:
+            sql: DELETE FROM prestamo;

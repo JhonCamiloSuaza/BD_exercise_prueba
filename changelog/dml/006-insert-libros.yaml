@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-insert-libros
+      author: Jhon Camilo Suaza Sanchez
+      comment: "Insertar datos iniciales de libros"
+      changes:
+        - insert:
+            tableName: libro
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: titulo, value: "Cien Años de Soledad" }
+              - column: { name: autor, value: "Gabriel García Márquez" }
+              - column: { name: isbn, value: "978-0-06-088328-7" }
+              - column: { name: genero, value: "Realismo Mágico" }
+              - column: { name: fecha_publicacion, valueDate: "1967-06-05" }
+              - column: { name: disponible, valueBoolean: true }
+        - insert:
+            tableName: libro
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: titulo, value: "Don Quijote de la Mancha" }
+              - column: { name: autor, value: "Miguel de Cervantes" }
+              - column: { name: isbn, value: "978-84-376-0494-7" }
+              - column: { name: genero, value: "Novela" }
+              - column: { name: fecha_publicacion, valueDate: "1605-01-16" }
+              - column: { name: disponible, valueBoolean: true }
+        - insert:
+            tableName: libro
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: titulo, value: "El Principito" }
+              - column: { name: autor, value: "Antoine de Saint-Exupéry" }
+              - column: { name: isbn, value: "978-0-15-601219-5" }
+              - column: { name: genero, value: "Fábula" }
+              - column: { name: fecha_publicacion, valueDate: "1943-04-06" }
+              - column: { name: disponible, valueBoolean: true }
+        - insert:
+            tableName: libro
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: titulo, value: "1984" }
+              - column: { name: autor, value: "George Orwell" }
+              - column: { name: isbn, value: "978-0-45-152493-5" }
+              - column: { name: genero, value: "Distopía" }
+              - column: { name: fecha_publicacion, valueDate: "1949-06-08" }
+              - column: { name: disponible, valueBoolean: false }
+        - insert:
+            tableName: libro
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: titulo, value: "Rayuela" }
+              - column: { name: autor, value: "Julio Cortázar" }
+              - column: { name: isbn, value: "978-84-376-0602-6" }
+              - column: { name: genero, value: "Novela Experimental" }
+              - column: { name: fecha_publicacion, valueDate: "1963-06-28" }
+              - column: { name: disponible, valueBoolean: true }
+      rollback:
+        - delete:
+            tableName: libro
+            where: isbn IN ('978-0-06-088328-7','978-84-376-0494-7','978-0-15-601219-5','978-0-45-152493-5','978-84-376-0602-6')

@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-grant-permissions
+      author: Jhon Camilo Suaza Sanchez
+      comment: "DCL - Otorgar permisos al rol de aplicación sobre las tablas del sistema"
+      changes:
+        - sql:
+            comment: "Crear rol de aplicación si no existe"
+            splitStatements: false
+            sql: >
+              DO $$
+              BEGIN
+                IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'app_user') THEN
+                  CREATE ROLE app_user WITH LOGIN PASSWORD 'app_password';
+                END IF;
+              END
+              $$;
+        - sql:
+            comment: "Otorgar permisos de conexión a la base de datos"
+            sql: GRANT CONNECT ON DATABASE "Bd_exercise_api" TO app_user;
+        - sql:
+            comment: "Otorgar uso del esquema público"
+            sql: GRANT USAGE ON SCHEMA public TO app_user;
+        - sql:
+            comment: "Otorgar permisos CRUD sobre tabla usuario"
+            sql: GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE usuario TO app_user;
+        - sql:
+            comment: "Otorgar permisos CRUD sobre tabla libro"
+            sql: GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE libro TO app_user;
+        - sql:
+            comment: "Otorgar permisos CRUD sobre tabla prestamo"
+            sql: GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE prestamo TO app_user;
+      rollback:
+        - sql:
+            sql: >
+              REVOKE ALL PRIVILEGES ON TABLE usuario, libro, prestamo FROM app_user;
+              REVOKE USAGE ON SCHEMA public FROM app_user;
+              REVOKE CONNECT ON DATABASE "Bd_exercise_api" FROM app_user;

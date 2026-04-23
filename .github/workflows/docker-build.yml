@@ -1,0 +1,36 @@
+# ============================================================
+# GitHub Action: Verificar Docker Build
+# Autor: Jhon Camilo Suaza Sanchez
+# ============================================================
+# Verifica que el Dockerfile y docker-compose.yml
+# se construyan correctamente sin errores.
+# ============================================================
+
+name: "Docker - Verificar Build"
+
+on:
+  push:
+    branches: [ main, develop, '**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  docker-build:
+    name: "Verificar Docker Build"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout del repositorio"
+        uses: actions/checkout@v4
+
+      - name: "🐳 Configurar Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "🔨 Construir imagen de Liquibase"
+        run: docker build -t exercise-liquibase:test .
+
+      - name: "✅ Verificar que la imagen se creó"
+        run: docker images | grep exercise-liquibase
+
+      - name: "🔍 Validar docker-compose.yml"
+        run: docker compose config --quiet
