@@ -34,5 +34,3 @@ databaseChangeLog:
   - include:
       file: dcl/008-grant-permissions.yaml
       relativeToChangelogFile: true
-
-ESTO_ES_UN_ERROR_DE_SINTAXIS

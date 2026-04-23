@@ -2,7 +2,7 @@
 # Dockerfile - Liquibase Runner
 # ============================================================
 # Imagen base de Liquibase con soporte PostgreSQL
-FROM liquibase/liquibase:4.27
+FROM liquibase/inventado:9.9.9
 
 # Copiar archivos de configuración y changelogs
 COPY liquibase.properties /liquibase/liquibase.properties
