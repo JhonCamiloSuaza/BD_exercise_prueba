@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: añadir-genero-usuario
+      author: Jhon Camilo Suaza Sanchez
+      changes:
+        - addColumn:
+            tableName: usuario
+            columns:
+              - column:
+                  name: genero
+                  type: varchar(20)

@@ -34,3 +34,9 @@ databaseChangeLog:
   - include:
       file: dcl/008-grant-permissions.yaml
       relativeToChangelogFile: true
+
+  
+    # ---- DDL: Definición de Estructura ----
+  - include:
+      file: ddl/009-add-genero.yaml
+      relativeToChangelogFile: true
